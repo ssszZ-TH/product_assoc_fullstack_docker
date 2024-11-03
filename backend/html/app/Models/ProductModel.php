@@ -25,11 +25,22 @@ class ProductModel extends Model
         'comment',
         'producttype',
     ];
-    
+
     // เอาไว้เผื่ออ้างถึง column ที่เก็บ timestamp
     // public const CREATED_AT = 'created_timestamp';
     // public const UPDATED_AT = 'updated_timestamp';
     public const CREATED_AT = null;
     public const UPDATED_AT = null;
 
+    // ความสัมพันธ์กับ ProductComponentModel ในฐานะ parent product
+    public function isParentOf()
+    {
+        return $this->hasMany(ProductComponentModel::class, 'parentproductid');
+    }
+
+    // ความสัมพันธ์กับ ProductComponentModel ในฐานะ component product
+    public function isComponentOf()
+    {
+        return $this->hasMany(ProductComponentModel::class, 'componentproductid');
+    }
 }

@@ -15,7 +15,7 @@ Route::apiResource('products', ProductController::class);
 มี function หลักๆ ดังนี้
 
 ```bash
-docker exec backend bash
+docker compose exec backend bash
 php artisan make:controller Api/ProductController --api
 ```
 คำสั่งนี้ มีไว้ใช้ในการ เชื่อมต่อ bash เข้าไปใน container backend laravel เเล้วขั้นตอนต่อมาก็คือ สั่งให้ artisan สร้าง controller ใหม่ โดยจะสร้างใน app/Http/Controllers/Api/ProductController.php
