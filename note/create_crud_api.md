@@ -145,3 +145,33 @@ php artisan make:model ProductModel
 
 # อนาคตอาจจะมีการทำ authentication เพื่อกันคนนอกไม่ให้ใช้ API
    - หากต้องการป้องกันไม่ให้ทุกคนเข้าถึง API ควรใช้ Middleware เช่น `auth:sanctum` สำหรับการป้องกันการเข้าถึง API
+
+# ทำเสร็จ ต้องมีการ validate ในกรณีที่ req เเย่
+
+ทำตามเอกสาร [./api_error_handle.md](./api_error_handle.md) ใน file นี้จะสอนวิธีการ
+
+ทำให้ เวลา req เเย่
+
+จากเดิม จะ redirect กลับไปหน้า default page ของ laravel
+
+จะตอบเป็น erorr ประมานนี้เเทน 
+
+```json
+{
+    "error": "Validation failed",
+    "messages": {
+        "fromdate": [
+            "The fromdate field is required."
+        ],
+        "quantityuse": [
+            "The quantityuse field is required."
+        ],
+        "parentproductid": [
+            "The parentproductid field is required."
+        ],
+        "componentproductid": [
+            "The componentproductid field is required."
+        ]
+    }
+}
+```

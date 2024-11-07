@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ProductModel as products;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
@@ -18,17 +19,24 @@ class ProductController extends Controller
     // สร้าง product ใหม่
     public function store(Request $request)
     {
-        $request->validate([
-            'code' => 'required|unique:products|max:20',
-            'name' => 'required|unique:products|max:255',
-            'introductiondate' => 'date',
-            'salesdiscontinuationdate' => 'date|nullable',
-            'comment' => 'string|nullable|max:255',
-            'producttype' => 'string|nullable|max:20',
-        ]);
+        try {
+            $request->validate([
+                'code' => 'required|unique:products|max:20',
+                'name' => 'required|unique:products|max:255',
+                'introductiondate' => 'date',
+                'salesdiscontinuationdate' => 'date|nullable',
+                'comment' => 'string|nullable|max:255',
+                'producttype' => 'string|nullable|max:20',
+            ]);
 
-        $product = products::create($request->all());
-        return response()->json($product, 201);
+            $product = products::create($request->all());
+            return response()->json($product, 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => 'Validation failed',
+                'messages' => $e->errors(),
+            ], 422);
+        }
     }
 
     // แสดง product ตาม ID
@@ -38,36 +46,37 @@ class ProductController extends Controller
     }
 
     // อัปเดตข้อมูลของ product ตาม ID
-    // อัปเดตข้อมูลของ product ตาม ID
     public function update(Request $request, $id)
     {
-        // ตรวจสอบว่ามี product อยู่ในฐานข้อมูลหรือไม่
         $product = products::find($id);
         if (!$product) {
             return response()->json(['error' => 'Product not found'], 404);
         }
 
-        // เก็บข้อมูลเดิมก่อนอัปเดต
         $originalData = $product->toArray();
 
-        // ตรวจสอบข้อมูลก่อนอัปเดต
-        $request->validate([
-            'code' => 'required|max:20|unique:products,code,' . $id,
-            'name' => 'required|max:255|unique:products,name,' . $id,
-            'introductiondate' => 'date',
-            'salesdiscontinuationdate' => 'date|nullable',
-            'comment' => 'string|nullable|max:255',
-            'producttype' => 'string|nullable|max:20',
-        ]);
+        try {
+            $request->validate([
+                'code' => 'required|max:20|unique:products,code,' . $id,
+                'name' => 'required|max:255|unique:products,name,' . $id,
+                'introductiondate' => 'date',
+                'salesdiscontinuationdate' => 'date|nullable',
+                'comment' => 'string|nullable|max:255',
+                'producttype' => 'string|nullable|max:20',
+            ]);
 
-        // อัปเดตข้อมูล
-        $product->update($request->all());
+            $product->update($request->all());
 
-        // ส่งข้อมูลเดิมและข้อมูลที่อัปเดตกลับไป
-        return response()->json([
-            'original_data' => $originalData,
-            'updated_data' => $product
-        ], 200);
+            return response()->json([
+                'original_data' => $originalData,
+                'updated_data' => $product
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => 'Validation failed',
+                'messages' => $e->errors(),
+            ], 422);
+        }
     }
 
     // ลบ product ตาม ID
