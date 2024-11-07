@@ -30,7 +30,9 @@ class ProductComponentModel extends Model
         'componentproductid',
     ];
 
-    // สร้างความสัมพันธ์กับตาราง products (Parent Product)
+    //เป็น code ตัวอย่างการใช้ relation query เฉยๆ ตามจริงไม่จำเป็นต้องมีก็ได้ เพราะเเค่ด้านบนที่มี ก็ครบ crud เเล้ว 
+
+    // สร้างความสัมพันธ์กับตาราง products (Parent Product) 
     public function parentProduct()
     {
         return $this->belongsTo(ProductModel::class, 'parentproductid');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProductComponentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('products', ProductController::class);
-Route::apiResource('productcomponents', ProductController::class);
+Route::apiResource('productcomponents', ProductComponentController::class);
 
 
 Route::get('test', function () {
